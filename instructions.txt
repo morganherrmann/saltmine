@@ -1,0 +1,109 @@
+
+
+py -m pip install textblob
+
+py -m textblob.download_corpora
+
+py -m pip install pillow
+
+py -m pip install pytesseract
+
+
+You must install pytesseract application
+here for windows
+
+https://github.com/UB-Mannheim/tesseract/wiki
+
+
+Dear Kathryn,
+
+
+
+I hope you're having a good week sofar. We met Tuesday following the Hive's screening of Just Mercy and I was hoping to follow up with you regarding our conversation!
+
+
+
+I'm currently a senior at UPenn and I have a background in engineering as well as screenwriting. My recent screenplay was the recipient of the Dick Wolf Award for Best Screenplay, placed in the top 15% at the Austin Film Festival, and was most recently announced as a semifinalist for Screencraft's Drama competition (Paramount/Fox). 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from core.models import Note
+from core.models import Hashtag
+
+def splash(request):
+    if request.method == "POST":
+        title = request.POST["title"]
+        body = request.POST["body"]
+        hashtags = [word[1:] for word in body.split() if word[0] == '#']
+        test = Hashtag(title="hellofam")
+        twit = Note.objects.create(title=title, body=body, author=request.user)
+        twit.hashtags.add(test)
+        twit.save()
+        print(hashtags)
+        print("got here saved tweet")
+        for tag in hashtags:
+            newTag = Hashtag(title = tag)
+            newTag.save()
+        instance = Note.objects.create(title=title, body=body, author=request.user)
+        instance.save()
+        print("got past the instance creation")
+        for tag in hashtags:
+            item = Hashtag.objects.filter(title=tag)[0]
+            item.save()
+            #problem seems to be here..
+            instance.hashtags.add(item)
+            instance.save()
+        return redirect("/")
+    else:
+        if request.user.is_authenticated:
+            notes = Note.objects.filter(author=request.user)
+        else:
+            notes = []
+        return render(request, "splash.html", {"notes": notes})
+
+def delete_view(request):
+    return redirect('/')
+
+def login_view(request):
+    if request.method == "POST":
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+    return render(request, 'accounts.html', {})
+
+def signup_view(request):
+    if request.method == "POST":
+        user = User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
+        return redirect('/')
+    return render(request, 'accounts.html', {})
+
+def logout_view(request):
+    logout(request)
+    return redirect("/login")
