@@ -31,7 +31,7 @@ class Salt:
         i = 0
         for text in myarray:
             blob = TextBlob(text)
-            tup = (text, i % 2, blob.sentiment)
+            tup = (text, i % 2, blob.sentiment, blob.sentiment_assessments)
             items.append(tup)
             i += 1
         self.analysis = items
@@ -40,7 +40,7 @@ class Salt:
     def save(self):
         e = defaultdict(list)
         for element in self.analysis:
-            e[element[1]].append({'party': str(element[0]), 'context': element[2]})
+            e[element[1]].append({'party': str(element[0]), 'sentiments': element[2], 'sentiment_analysis': element[3]})
         with open('download.txt', 'w') as outfile:
             json.dump(dict(e), outfile)
         print(json.dumps(dict(e)))

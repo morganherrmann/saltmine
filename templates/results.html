@@ -30,18 +30,18 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Polarity/Subjectivity</th>
+                        <th scope="col">Analysis</th>
                       </tr>
                     </thead>
                     <tbody>
                             {% for text in texts %}
                             <tr>
                                     <th scope="row">PARTY {{text.1}}</th>
-                                    <td>Mark</td>
                                     <td>{{text.0}}</td>
                                     <td>{{text.2}}</td>
+                                    <td>{{text.3}}</td>
                                   </tr>
                           {% endfor %}
                       
