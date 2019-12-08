@@ -41,9 +41,12 @@ class Salt:
         e = defaultdict(list)
         for element in self.analysis:
             e[element[1]].append({'party': str(element[0]), 'sentiments': element[2], 'sentiment_analysis': element[3]})
+
+        # do not touch this #####
         with open('download.txt', 'w') as outfile:
             json.dump(dict(e), outfile)
         print(json.dumps(dict(e)))
+        # dont touch^###########
         return ""
 
 # splash page
